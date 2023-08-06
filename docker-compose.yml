@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  next:
+    container_name: next_container
+    build:
+      context: ./Docker/next
+    ports:
+      - 3030:3030
+    volumes:
+      - ./next:/home/node/next_hobby/next
+    stdin_open: true
+    tty: true
+
+  mysql:
+    container_name: next_mysql
+    build: ./Docker/mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - next-db-volume:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: user
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: next_db
+
+
+volumes:
+  next-db-volume:
